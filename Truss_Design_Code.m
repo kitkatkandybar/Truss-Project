@@ -1,4 +1,4 @@
-%% Truss Design Parameters
+%% Truss Class Example Parameters
 
 %{
     This code contains the parameters of the truss including the joint 
@@ -55,6 +55,5 @@ Y = [0, 4, 4, 8, 8, 4, 4, 0];
 L = [0, 0, 25, 0, 0, 0, 0, 0, 0, 0];
 
 
-% Saving to file
-file = 'Truss_Design_Code.mat';
-save(file, 'C', 'Sx', 'Sy', 'X', 'Y', 'L');
+% Saving to a file
+save Truss_Class_Example.mat
