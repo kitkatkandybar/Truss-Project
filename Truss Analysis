@@ -9,12 +9,12 @@ Jointy = Y;
 [Crow Ccol] = size(Ax);
 for j = 1 : Ccol
     for i = 1 : Crow
-        if (i == 1)
+        if (Ax[i,j] == 1)
             member1 = i;
         end
     end
-    for i = 1 : Ccol
-        if (i == 1)
+    for i = Crow : 1
+        if (Ax[i,j] == 1)
             member2 = i;
         end
     end
