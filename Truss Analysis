@@ -1,7 +1,7 @@
 % Truss Analysis File
 
 fprintf('EK301, Section A2, Peng Zhai, Kakit Wong, Daniel Pichkar, 4/10/2022\n');
-load('Truss_Class_exampl.mat')
+load('Truss_Class_example.mat')
 A = C;
 [Crow Ccol] = size(A);
 for j = 1 : Ccol
