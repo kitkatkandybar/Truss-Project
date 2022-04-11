@@ -2,6 +2,16 @@
 
 fprintf('EK301, Section A2, Peng Zhai, Kakit Wong, Danile Pichkar, 4/10/2022\n');
 load('TrussProject2.mat')
+A = C;
+[Crow Ccol] = size(A);
+for j = 1 : Ccol
+    for i = 1 : Crow
+        if (i == 1)
+            member1 = i;
+    for 
+        if ()
+
+
 fprintf('Load: %.2f N\n', max(abs(L)));
 [Ax, Ay] = getA2(C,X,Y); 
 A = [Ax Sx; Ay Sy]; 
