@@ -1,0 +1,52 @@
+% Truss Analysis File
+
+fprintf('EK301, Section A2, Peng Zhai, Kakit Wong, Danile Pichkar, 4/10/2022\n');
+load('TrussProject2.mat')
+fprintf('Load: %.2f N\n', max(abs(L)));
+[Ax, Ay] = getA2(C,X,Y); 
+A = [Ax Sx; Ay Sy]; 
+T = A\L; 
+fprintf('Member forces:\n');
+for i = 1:(length(T)-3)
+    if (T(i) < 0.0005)&&(T(i) > -0.0005)
+        fprintf('m%.0f: 0.000 \n',i);
+    elseif T(i) < 0
+        fprintf('m%.0f: %.3f N(C)\n',i,abs(T(i)));
+    elseif T(i) > 0
+       fprintf('m%.0f: %.3f N (T)\n',i,abs(T(i)));
+    end
+ end
+fprintf('Reaction forces:\n');
+fprintf('Sx1: %.3f N\n',T(length(T)-2));
+fprintf('Sy1: %.3f N\n',T(length(T)-1));
+fprintf('Sy2: %.3f N\n',T(length(T)));
+[totaljoints,totalmembers] = size(C);
+memberlengths = zeros(1,totalmembers);
+     for i = 1:totalmembers
+         findmember = find(C(:,i) == 1);
+         memberlengths(i) = sqrt(((X(findmember(2))-X(findmember(1)))^2)+((Y(findmember(2))-Y(findmember(1)))^2));
+     end
+for i = 1:length(memberlengths)
+    maxloadofmembers(i) = 1327.9/(memberlengths(i))^2; %(N)
+    SR(i) = T(i)/abs(maxloadofmembers(i));  
+end
+maxindex = find(SR(1,:) == min(SR));
+%the maxindex values are the member numbers that buckle first
+theoreticalmaxload = 1/abs(SR(maxindex(1))); %(N)max load
+maxuncertainty = 1.45/maxloadofmembers(maxindex(1))*theoreticalmaxload;
+fprintf('Theoretical maximum load: %.3f N ± %.2f N\n',theoreticalmaxload,maxuncertainty);
+if length(maxindex) == 1
+    fprintf('Member that will buckle first: %.0f (length %.2f cm)\n',maxindex(1),memberlengths(maxindex(1)));
+else
+    fprintf('Members that will buckle first: ')
+    for i = 1:length(maxindex)
+        fprintf('%.0f (length %.2f cm)',maxindex(i));
+    end
+    fprintf('\n')
+end
+[joints members] = size(C);
+totalmemberlength = sum(memberlengths); 
+totalcost = 10*joints + totalmemberlength; %$
+fprintf('Cost of truss: $%.0f\n',totalcost);
+loadcostratio = theoreticalmaxload/totalcost;
+fprintf('Theoretical max load/cost ratio: %.4f N/$\n',loadcostratio);
