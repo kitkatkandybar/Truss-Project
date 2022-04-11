@@ -2,14 +2,32 @@
 
 fprintf('EK301, Section A2, Peng Zhai, Kakit Wong, Daniel Pichkar, 4/10/2022\n');
 load('Truss_Class_example.mat')
-A = C;
-[Crow Ccol] = size(A);
+Ax = C;
+Ay = C;
+Jointx = X;
+Jointy = Y;
+[Crow Ccol] = size(Ax);
 for j = 1 : Ccol
     for i = 1 : Crow
         if (i == 1)
             member1 = i;
-    for 
-        if ()
+        end
+    end
+    for i = 1 : Ccol
+        if (i == 1)
+            member2 = i;
+        end
+    end
+    x2 = Jointx[member2];
+    x1 = Jointx[member1];
+    y1 = Jointy[member1];
+    y2 = Jointy[member2];
+    dist = ((x2 - x1)^2 + (y2 - y1)^2)^0.5;
+    Ax [i , j] = (x2 - x1) / dist;
+    Ay [i , j] = (x2 - x1) / dist;
+end
+
+A = [Ax Sx; Ay Sy];
 
 
 fprintf('Load: %.2f N\n', max(abs(L)));
