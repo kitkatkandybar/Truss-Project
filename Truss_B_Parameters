@@ -46,7 +46,7 @@ X = [0, 6, 11.5, 20, 20, 32];
 Y = [0, 10, 0, 9, 0, 0];
 
     % Load vector which represents the known forces acting on each joint
-L = [0, 0, 0, 0, 32, 0, 0, 0, 0];
+L = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 0];
 
 
 % Saving to a file
