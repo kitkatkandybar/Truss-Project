@@ -53,4 +53,4 @@ L = [0, 0, 0, 0, 32, 0, 0, 0, 0, 0];
 
 
 % Saving to a file
-save Truss_A.mat
+save('Truss_A','C','Sx','Sy','X','Y','L');
