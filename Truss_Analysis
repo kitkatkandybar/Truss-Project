@@ -1,80 +1,82 @@
 % Truss Analysis File
-
 fprintf('EK301, Section A2, Peng Zhai, Kakit Wong, Daniel Pichkar, 4/10/2022\n');
-load('Truss_Class_example.mat')
-Ax = C;
-Ay = C;
-Jointx = X;
-Jointy = Y;
-[Crow Ccol] = size(Ax);
+load('Truss_Class_Example.mat')
+
+[Crow, Ccol] = size(C);
+Ax = zeros(Crow, Ccol);
+Ay = zeros(Crow, Ccol);
+member1 = 0;
+member2 = 0;
+totalDistance = 0;
+dist = zeros(1, Ccol);
 for j = 1 : Ccol
-    for i = 1 : Crow
-        if (Ax[i,j] == 1)
+    i = 1;
+    while member1 == 0
+        if (C(i, j) == 1)
             member1 = i;
+        else 
+            i = i + 1;
         end
     end
-    for i = Crow : 1
-        if (Ax[i,j] == 1)
+    i = Crow;
+    while member2 == 0
+        if (C(i, j) == 1)
             member2 = i;
+        else 
+            i = i - 1;
         end
     end
-    x2 = Jointx[member2];
-    x1 = Jointx[member1];
-    y1 = Jointy[member1];
-    y2 = Jointy[member2];
-    dist = ((x2 - x1)^2 + (y2 - y1)^2)^0.5;
-    Ax [i , j] = (x2 - x1) / dist;
-    Ay [i , j] = (x2 - x1) / dist;
+   
+    x1 = X(member1);
+    x2 = X(member2);
+    y1 = Y(member1);
+    y2 = Y(member2);
+    dist(j) = ((x2 - x1)^2 + (y2 - y1)^2)^0.5;
+    totalDistance = totalDistance + dist(j);
+    Ax(member1, j) = (x2 - x1) / dist(j);
+    Ay(member1, j) = (y2 - y1) / dist(j);
+    Ax(member2, j) = (x1 - x2) / dist(j);
+    Ay(member2, j) = (y1 - y2) / dist(j);
+    member1 = 0;
+    member2 = 0;
 end
-
 A = [Ax Sx; Ay Sy];
-
-
-fprintf('Load: %.2f N\n', max(abs(L)));
-[Ax, Ay] = getA2(C,X,Y); 
-A = [Ax Sx; Ay Sy]; 
-T = A\L; 
-fprintf('Member forces:\n');
-for i = 1:(length(T)-3)
-    if (T(i) < 0.0005)&&(T(i) > -0.0005)
-        fprintf('m%.0f: 0.000 \n',i);
-    elseif T(i) < 0
-        fprintf('m%.0f: %.3f N(C)\n',i,abs(T(i)));
-    elseif T(i) > 0
-       fprintf('m%.0f: %.3f N (T)\n',i,abs(T(i)));
+T = A \ L;
+T = round(T, 3);
+fprintf('Load: %.1f oz\n', max(abs(L)));
+fprintf('Member forces in oz');
+for i = 1 : (length(T) - 3)
+    if T(i) > 0
+        fprintf('m%d: %.3f (T)\n', i, T(i));
+ 
+    elseif T(i) < 0  
+        fprintf('m%d: %.3f (C)\n', i, abs(T(i)));
+    else
+        fprintf('m%d: 0.0\n', i);
     end
- end
-fprintf('Reaction forces:\n');
-fprintf('Sx1: %.3f N\n',T(length(T)-2));
-fprintf('Sy1: %.3f N\n',T(length(T)-1));
-fprintf('Sy2: %.3f N\n',T(length(T)));
-[totaljoints,totalmembers] = size(C);
-memberlengths = zeros(1,totalmembers);
-     for i = 1:totalmembers
-         findmember = find(C(:,i) == 1);
-         memberlengths(i) = sqrt(((X(findmember(2))-X(findmember(1)))^2)+((Y(findmember(2))-Y(findmember(1)))^2));
-     end
-for i = 1:length(memberlengths)
-    maxloadofmembers(i) = 1327.9/(memberlengths(i))^2; %(N)
-    SR(i) = T(i)/abs(maxloadofmembers(i));  
 end
-maxindex = find(SR(1,:) == min(SR));
-%the maxindex values are the member numbers that buckle first
-theoreticalmaxload = 1/abs(SR(maxindex(1))); %(N)max load
-maxuncertainty = 1.45/maxloadofmembers(maxindex(1))*theoreticalmaxload;
-fprintf('Theoretical maximum load: %.3f N ± %.2f N\n',theoreticalmaxload,maxuncertainty);
-if length(maxindex) == 1
-    fprintf('Member that will buckle first: %.0f (length %.2f cm)\n',maxindex(1),memberlengths(maxindex(1)));
-else
-    fprintf('Members that will buckle first: ')
-    for i = 1:length(maxindex)
-        fprintf('%.0f (length %.2f cm)',maxindex(i));
+fprintf('Reaction forces in oz:\n')
+fprintf('Sx1: %.3f oz\n',T(length(T)-2));
+fprintf('Sy1: %.3f oz\n',T(length(T)-1));
+fprintf('Sy2: %.3f oz\n',T(length(T)));
+cost = 10 * Crow + totalDistance;
+fprintf('Cost of truss: $%.2f\n', cost);
+Pcrit = zeros(1, Ccol);
+for i = 1 : length(Pcrit)
+    if T(i) < 0
+        Pcrit(i) = 3908.184 * dist(i)^-2.211;
     end
-    fprintf('\n')
+end 
+Rm = zeros(1, Ccol);
+for i = 1 : Ccol
+    Rm(i) = T(i) / max(abs(L));
 end
-[joints members] = size(C);
-totalmemberlength = sum(memberlengths); 
-totalcost = 10*joints + totalmemberlength; %$
-fprintf('Cost of truss: $%.0f\n',totalcost);
-loadcostratio = theoreticalmaxload/totalcost;
-fprintf('Theoretical max load/cost ratio: %.4f N/$\n',loadcostratio);
+Wfailure = zeros(1, Ccol);
+for i = 1 : Ccol
+    Wfailure(i) = -Pcrit(i) / Rm(i);
+end
+Wfailure(isinf(Wfailure)|isnan(Wfailure)) = 0;
+buckleFirst = find(Wfailure(:) == min(Wfailure(Wfailure > 0)));
+
+LoadCostRatio = Wfailure(buckleFirst(1))/cost;
+fprintf('Theoretical max load/cost ratio in oz/$: %.4f\n', LoadCostRatio);
