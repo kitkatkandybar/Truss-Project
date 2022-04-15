@@ -12,11 +12,11 @@
     % 1 if the member is connected to the joint and 0 for anything else 
 
 C = [1,	1,	0,	0,	0,	0,	0,	0,	0;   %Joint 1
-     1,	1,	0,	0,	0,	0,	0,	0,	0;   %Joint 2
-     1,	1,	0,	0,	0,	0,	0,	0,	0;   %Joint 3
-     1,	1,	0,	0,	0,	0,	0,	0,	0;   %Joint 4
-     1,	1,	0,	0,	0,	0,	0,	0,	0;   %Joint 5
-     1,	1,	0,	0,	0,	0,	0,	0,	0];  %Joint 6
+     1,	0,	1,	1,	0,	0,	0,	0,	0;   %Joint 2
+     0,	1,	1,	0,	1,	1,	0,	0,	0;   %Joint 3
+     0,	0,	0,	1,	1,	0,	1,	0,	1;   %Joint 4
+     0,	0,	0,	0,	0,	1,	1,	1,	0;   %Joint 5
+     0,	0,	0,	0,	0,	0,	0,	1,	1];  %Joint 6
 
 
     % Connection matrix for the support forces in each axis
@@ -46,8 +46,8 @@ X = [0, 6, 11.5, 20, 20, 32];
 Y = [0, 10, 0, 9, 0, 0];
 
     % Load vector which represents the known forces acting on each joint
-L = [0, 0, 0, 0, 32, 0, 0, 0, 0, 0];
+L = [0, 0, 0, 0, 32, 0, 0, 0, 0];
 
 
 % Saving to a file
-save Truss_B.mat
+save('Truss_B','C','Sx','Sy','X','Y','L');
