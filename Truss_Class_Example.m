@@ -15,7 +15,7 @@ C = [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;   %Joint 1
      1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0;   %Joint 2
      0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0;   %Joint 3
      0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0;   %Joint 4
-     0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0;   %Joint 5
+     0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0;   %Joint 5
      0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0;   %Joint 6
      0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1;   %Joint 7
      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1];  %Joint 8
@@ -45,14 +45,15 @@ Sy = [0, 1, 0;  %Joint 1
       0, 0, 0;  %Joint 7
       0, 0, 1]; %Joint 8
 
-    % Location vectors in X and Y direction of each joint in m
+    % Defines the X locations of each joint in m
 X = [0, 0, 4, 4, 8, 8, 12, 12];
 
+    % Defines the Y locations of each joint in m
 Y = [0, 4, 4, 8, 8, 4, 4, 0];
 
     % Load vector which represents the known forces acting on each joint
-    % 1-8 load on joint in X & 9-16 load on joint in Y
-L = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0];
+L = [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 25; 0; 0; 0; 0; 0];
+
 
 % Saving to a file
-save Truss_Class_Example.mat
+save('Truss_Class_Example','C','Sx','Sy','X','Y','L');
