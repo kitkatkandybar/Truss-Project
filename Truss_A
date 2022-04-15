@@ -30,7 +30,9 @@ Sx = [1, 0, 0;  %Joint 1
       0, 0, 0;  %Joint 3
       0, 0, 0;  %Joint 4
       0, 0, 0;  %Joint 5
-      0, 0, 0]; %Joint 6
+      0, 0, 0;  %Joint 6
+      0, 0, 0;  %Joint 7
+      0, 0, 0]; %Joint 8
 
     
     % 1 at the pin joint and the roller in the y direction
@@ -39,7 +41,9 @@ Sy = [0, 1, 0;  %Joint 1
       0, 0, 0;  %Joint 3
       0, 0, 0;  %Joint 4
       0, 0, 0;  %Joint 5
-      0, 0, 1]; %Joint 6
+      0, 0, 0;  %Joint 6
+      0, 0, 0;  %Joint 7
+      0, 0, 1]; %Joint 8
 
     % Defines the X locations of each joint in m
 X = [0, 3.8,  9,  11.4, 18.7, 20, 27.4, 32];
