@@ -1,6 +1,6 @@
 % Truss Analysis File
 fprintf('EK301, Section A2, Peng Zhai, Kakit Wong, Daniel Pichkar, 4/10/2022\n');
-load('Truss_Class_Example.mat')
+load('Truss_A.mat');
 
 [Crow, Ccol] = size(C);
 Ax = zeros(Crow, Ccol);
@@ -44,7 +44,7 @@ A = [Ax Sx; Ay Sy];
 T = A \ L;
 T = round(T, 3);
 fprintf('Load: %.1f oz\n', max(abs(L)));
-fprintf('Member forces in oz');
+fprintf('Member forces in oz:\n');
 for i = 1 : (length(T) - 3)
     if T(i) > 0
         fprintf('m%d: %.3f (T)\n', i, T(i));
@@ -68,15 +68,36 @@ for i = 1 : length(Pcrit)
     end
 end 
 Rm = zeros(1, Ccol);
-for i = 1 : Ccol
-    Rm(i) = T(i) / max(abs(L));
-end
+Rm = T/32;
 Wfailure = zeros(1, Ccol);
 for i = 1 : Ccol
     Wfailure(i) = -Pcrit(i) / Rm(i);
 end
 Wfailure(isinf(Wfailure)|isnan(Wfailure)) = 0;
 buckleFirst = find(Wfailure(:) == min(Wfailure(Wfailure > 0)));
-
 LoadCostRatio = Wfailure(buckleFirst(1))/cost;
 fprintf('Theoretical max load/cost ratio in oz/$: %.4f\n', LoadCostRatio);
+
+PcritLow = zeros(1, Ccol);
+PcritHigh = zeros(1, Ccol);
+for i = 1 : Ccol
+    if (Pcrit(i) > 0)
+        PcritLow(i) = Pcrit(i) - 4.116;
+        PcritHigh(i) = Pcrit(i) + 4.116;
+    end
+end
+if (cost >= 295)
+    fprintf('Too expensive to build: %.2f\n', cost);
+end
+for i = 1 : Ccol
+    if -T(i) > Pcrit(i)
+        fprintf('Truss cannot support the load, member %d will buckle.\n', i);
+    end
+end
+for i = 1 : length(buckleFirst)
+    fprintf('member %d will buckle first.\n', buckleFirst(i));
+end
+fprintf('member of the force at (nominal) maximum load:\n')
+for i = 1 : Ccol
+    fprintf('member %d: %.3foz\n', i, Rm(i) * Wfailure(buckleFirst));
+end
