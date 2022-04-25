@@ -1,4 +1,4 @@
-%% Truss C Parameters
+%% Truss Design 3 Parameters
 
 %{
     This code contains the parameters of the truss including the joint 
@@ -53,4 +53,4 @@ L = [0, 0, 0, 0, 32, 0, 0, 0, 0, 0];
 
 
 % Saving to a file
-save('Truss_C','C','Sx','Sy','X','Y','L');
+save('Truss_Design3','C','Sx','Sy','X','Y','L');
