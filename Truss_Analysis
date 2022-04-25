@@ -1,7 +1,6 @@
 % Truss Analysis File
 fprintf('EK301, Section A2, Peng Zhai, Kakit Wong, Daniel Pichkar, 4/10/2022\n');
-load('Truss_A.mat');
-
+load('Truss_Class_Example.mat');
 [Crow, Ccol] = size(C);
 Ax = zeros(Crow, Ccol);
 Ay = zeros(Crow, Ccol);
@@ -26,7 +25,6 @@ for j = 1 : Ccol
             i = i - 1;
         end
     end
-   
     x1 = X(member1);
     x2 = X(member2);
     y1 = Y(member1);
@@ -97,7 +95,20 @@ end
 for i = 1 : length(buckleFirst)
     fprintf('member %d will buckle first.\n', buckleFirst(i));
 end
+MaxLoad = Wfailure(buckleFirst(1));
+WfailureLow = zeros(1, Ccol);
+for i = 1 : Ccol
+    WfailureLow(i) = -PcritLow(i) / Rm(i);
+end
+MaxLoadLow = WfailureLow(buckleFirst);
+WfailureHigh = zeros(1, Ccol);
+for i = 1 : Ccol
+    WfailureHigh(i) = -PcritHigh(i) / Rm(i);
+end
+MaxLoadHigh = WfailureHigh(buckleFirst);
+fprintf('The maximum load is %.3f oz / %.3f oz / %.3f oz\n', MaxLoad, MaxLoadLow, MaxLoadHigh);
 fprintf('member of the force at (nominal) maximum load:\n')
 for i = 1 : Ccol
     fprintf('member %d: %.3foz\n', i, Rm(i) * Wfailure(buckleFirst));
 end
+
