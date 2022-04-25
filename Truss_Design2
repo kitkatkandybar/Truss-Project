@@ -1,4 +1,4 @@
-%% Truss B Parameters
+%% Truss Design 2 Parameters
 
 %{
     This code contains the parameters of the truss including the joint 
@@ -50,4 +50,4 @@ L = [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 32; 0];
 
 
 % Saving to a file
-save('Truss_B','C','Sx','Sy','X','Y','L');
+save('Truss_Design2','C','Sx','Sy','X','Y','L');
